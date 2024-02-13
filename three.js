@@ -55,6 +55,11 @@ const STEP_HEIGHT_RATIO = clampedRandom(1, 1);
 let renderer, scene, camera, composer, tanFOV;
 
 init();
+
+const title = document.getElementById("title");
+title.className = "fade-in";
+title.style.opacity = "100%";
+
 animate();
 
 function init() {

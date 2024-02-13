@@ -46,7 +46,31 @@ body {
     );
 }
 
+.fade-in {
+  animation-name: fadeIn;
+  animation-duration: 0.2s;
+  animation-direction: normal;
+  animation-timing-function: ease-in;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0%;
+  }
+
+  100% {
+    opacity: 100%;
+  }
+}
+
+*:focus-visible {
+  outline: none !important;
+}
+
 #title {
+  /* will get shown once the rest renders */
+  opacity: 0%;
+
   position: absolute;
   margin: 0px;
   border: 0px;
