@@ -32,8 +32,11 @@ if (!WebGL.isWebGLAvailable()) {
 }
 
 // TODO:
-// - text styling
-// - post processing (fog, noise, blur)
+// - use InstancedMesh
+// - group postprocessing passes
+// - favicon
+
+const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
 const NUM_LINES = window.innerWidth / 50;
 const LINE_ROTATION = clampedRandom(0.5, 0.2) * (Math.random() > 0.5 ? 1 : -1);
@@ -47,7 +50,7 @@ const LINE_STEPS = 30;
 const STEP_SIZE = (2 * Math.PI) / LINE_STEPS;
 const STEP_JITTER = 0.05;
 
-let renderer, scene, camera, composer;
+let renderer, scene, camera, composer, tanFOV;
 
 init();
 animate();
@@ -70,12 +73,10 @@ function init() {
 	camera.position.set(-4, -7.5, 5.5);
 	camera.rotation.set(0.8, -0.3, 0.3);
 	scene.add(camera);
+	tanFOV = Math.tan(((Math.PI / 180) * camera.fov) / 2);
 
-	document.addEventListener("resize", () => {
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-		renderer.setSize(window.innerWidth, window.innerHeight);
-	});
+	window.addEventListener("resize", handleResize);
+	screen.orientation.addEventListener("change", handleResize);
 
 	const baseMesh = createBaseLineMesh();
 	const baseGeometry = baseMesh.geometry.clone();
@@ -115,6 +116,17 @@ function render() {
 	});
 
 	composer.render();
+}
+
+function handleResize() {
+	camera.fov =
+		(360 / Math.PI) *
+		Math.atan(tanFOV * (window.innerHeight / ORIGINAL_WINDOW_HEIGHT));
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	composer.setSize(window.innerWidth, window.innerHeight);
 }
 
 function createBaseLineMesh() {
