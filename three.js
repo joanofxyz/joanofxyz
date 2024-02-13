@@ -34,6 +34,7 @@ if (!WebGL.isWebGLAvailable()) {
 // TODO:
 // - use InstancedMesh
 // - group postprocessing passes
+// - phone responsiveness a bit wonky on actual phones
 
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
@@ -48,6 +49,8 @@ const LINE_SUBDIVISIONS = 9;
 const LINE_STEPS = 30;
 const STEP_SIZE = (2 * Math.PI) / LINE_STEPS;
 const STEP_JITTER = 0.05;
+const STEP_WIDTH_RATIO = clampedRandom(1, 2);
+const STEP_HEIGHT_RATIO = clampedRandom(1, 1);
 
 let renderer, scene, camera, composer, tanFOV;
 
@@ -100,12 +103,8 @@ function init() {
 
 function animate() {
 	requestAnimationFrame(animate);
-	render();
-}
 
-function render() {
 	const time = Date.now() * 0.001;
-
 	scene.traverse(function(object) {
 		if (object.isLine) {
 			object.position.z =
@@ -129,15 +128,14 @@ function handleResize() {
 }
 
 function createBaseLineMesh() {
-	const scaleWidth = clampedRandom(1, 2);
-	const scaleHeight = clampedRandom(1, 1);
-
 	const vertices = [];
 	for (let i = 0; i <= LINE_STEPS; i++) {
 		vertices.push(
 			new Vector3(
-				Math.sin(i * STEP_SIZE) * scaleWidth + clampedRandom(STEP_JITTER, 0),
-				Math.cos(i * STEP_SIZE) * scaleHeight + clampedRandom(STEP_JITTER, 0),
+				Math.sin(i * STEP_SIZE) * STEP_WIDTH_RATIO +
+				clampedRandom(STEP_JITTER, 0),
+				Math.cos(i * STEP_SIZE) * STEP_HEIGHT_RATIO +
+				clampedRandom(STEP_JITTER, 0),
 				0,
 			),
 		);
