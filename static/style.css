@@ -1,0 +1,75 @@
+body {
+	margin: 0px;
+	background: black;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+@font-face {
+	font-family: "font";
+	src: url("ubuntu.ttf");
+}
+
+@keyframes rainbow {
+	from {
+		filter: hue-rotate(0deg);
+	}
+
+	to {
+		filter: hue-rotate(360deg);
+	}
+}
+
+.rainbow {
+	animation-name: rainbow;
+	animation-duration: 1.667s;
+	animation-direction: normal;
+	animation-iteration-count: infinite;
+	background: linear-gradient(45deg,
+			hsla(0deg, 100%, 75%, 80%),
+			hsla(120deg, 100%, 75%, 20%) 80%),
+		linear-gradient(165deg,
+			hsla(120deg, 100%, 75%, 80%),
+			hsla(240deg, 100%, 75%, 20%) 80%),
+		linear-gradient(285deg,
+			hsla(240deg, 100%, 75%, 80%),
+			hsla(360deg, 100%, 75%, 20%) 80%);
+}
+
+#title {
+	position: absolute;
+	margin: 0px;
+	border: 0px;
+	padding: 0.1em;
+
+	display: flex;
+	flex-direction: row;
+
+	font-size: 4rem;
+	font-family: "font", sans-serif, system-ui;
+	color: hsla(0deg, 100%, 100%, 80%);
+
+	.rainbow {
+		color: transparent;
+		background-clip: text;
+		-webkit-background-clip: text;
+	}
+}
+
+#error-dialog {
+	border: 0px;
+	color: white;
+	font-family: system-ui;
+
+	a {
+		text-decoration: unset !important;
+		font-weight: bold;
+		color: hsl(120deg, 100%, 75%) !important;
+		filter: grayscale(70%);
+	}
+
+	a:hover {
+		filter: unset;
+	}
+}
