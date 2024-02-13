@@ -34,7 +34,6 @@ if (!WebGL.isWebGLAvailable()) {
 // TODO:
 // - use InstancedMesh
 // - group postprocessing passes
-// - favicon
 
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
