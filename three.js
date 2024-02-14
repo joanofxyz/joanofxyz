@@ -38,7 +38,7 @@ if (!WebGL.isWebGLAvailable()) {
 
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
-const NUM_LINES = window.innerWidth / 50;
+const NUM_LINES = window.innerWidth / 50 + window.innerHeight / 30;
 const LINE_ROTATION = clampedRandom(0.5, 0.2) * (Math.random() > 0.5 ? 1 : -1);
 const LINE_GAP = Math.round(clampedRandom(3, 2));
 const WAVE_DEPTH = 0.5;
