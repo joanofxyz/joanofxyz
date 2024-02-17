@@ -33,7 +33,6 @@ if (!WebGL.isWebGLAvailable()) {
 // TODO:
 // - phone responsiveness a bit wonky on actual phones: rotating the phone makes the scene not adjust to the full new width
 // - moving 3d noise for something
-// - MeshLine lib
 // - adjust bokeh effect to have a focal point
 
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
