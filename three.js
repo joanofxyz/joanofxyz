@@ -33,7 +33,6 @@ if (!WebGL.isWebGLAvailable()) {
 // TODO:
 // - phone responsiveness a bit wonky on actual phones: rotating the phone makes the scene not adjust to the full new width
 // - moving 3d noise for something
-// - adjust bokeh effect to have a focal point
 
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
@@ -53,6 +52,8 @@ const STEP_SIZE = (2 * Math.PI) / LINE_STEPS;
 const STEP_JITTER = 0.35 / 2;
 const STEP_WIDTH_RATIO = clampedRandom(2.67, 3.67);
 const STEP_HEIGHT_RATIO = clampedRandom(1.33, 2.33);
+
+const AFTERIMAGE_DAMP = clampedRandom(0.92, 0.97);
 
 let renderer, scene, camera, composer, tanFOV;
 
@@ -160,7 +161,7 @@ function setupPostProcessing() {
 	const renderPass = new RenderPass(scene, camera);
 	composer.addPass(renderPass);
 
-	const afterimagePass = new AfterimagePass(0.91);
+	const afterimagePass = new AfterimagePass(AFTERIMAGE_DAMP);
 	composer.addPass(afterimagePass);
 
 	const bloomPass = new UnrealBloomPass(
