@@ -35,7 +35,9 @@ if (!WebGL.isWebGLAvailable()) {
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
 const NUM_LINES = Math.floor(
-	Math.max(window.innerWidth / 60, window.innerHeight / 30),
+	window.innerWidth >= window.innerHeight
+		? window.innerWidth / 60
+		: window.innerHeight / 30,
 );
 const LINE_ROTATION = clampedRandom(-0.45, 0.45);
 const LINE_GAP = Math.round(clampedRandom(2, 5));
