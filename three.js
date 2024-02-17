@@ -34,6 +34,7 @@ if (!WebGL.isWebGLAvailable()) {
 // - phone responsiveness a bit wonky on actual phones: rotating the phone makes the scene not adjust to the full new width
 // - moving 3d noise for something
 // - MeshLine lib
+// - adjust bokeh effect to have a focal point
 
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
@@ -51,7 +52,7 @@ const WAVE_SPEED =
 const LINE_SUBDIVISIONS = 30;
 const LINE_STEPS = 20;
 const STEP_SIZE = (2 * Math.PI) / LINE_STEPS;
-const STEP_JITTER = 0.35;
+const STEP_JITTER = 0.35 / 2;
 const STEP_WIDTH_RATIO = clampedRandom(2.667, 3.667);
 const STEP_HEIGHT_RATIO = clampedRandom(1.333, 2.333);
 
@@ -134,9 +135,9 @@ function createLineMesh(count) {
 		vertices.push(
 			new Vector3(
 				Math.sin(i * STEP_SIZE) * STEP_WIDTH_RATIO +
-				clampedRandom(0, STEP_JITTER),
+				clampedRandom(-STEP_JITTER, STEP_JITTER),
 				Math.cos(i * STEP_SIZE) * STEP_HEIGHT_RATIO +
-				clampedRandom(0, STEP_JITTER),
+				clampedRandom(-STEP_JITTER, STEP_JITTER),
 				0,
 			),
 		);
