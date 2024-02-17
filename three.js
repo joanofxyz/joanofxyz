@@ -61,7 +61,7 @@ init();
 
 const title = document.getElementById("title");
 title.className = "fade-in";
-title.style.opacity = "67%";
+title.style.opacity = "100%";
 
 animate();
 
