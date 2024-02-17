@@ -31,25 +31,25 @@ if (!WebGL.isWebGLAvailable()) {
 }
 
 // TODO:
-// - use InstancedMesh
-// - group postprocessing passes
 // - phone responsiveness a bit wonky on actual phones
 
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
-const NUM_LINES = window.innerWidth / 50 + window.innerHeight / 30;
-const LINE_ROTATION = clampedRandom(0.5, 0.2) * (Math.random() > 0.5 ? 1 : -1);
+const NUM_LINES = Math.floor(
+	Math.max(window.innerWidth / 60, window.innerHeight / 30),
+);
+const LINE_ROTATION = clampedRandom(0.3, 0.15, true);
 const LINE_GAP = Math.round(clampedRandom(3, 2));
 const WAVE_DEPTH = 0.5;
 const WAVE_SPEED =
 	Math.round(Math.random() + Math.round(clampedRandom(1, 1))) * 10;
 
-const LINE_SUBDIVISIONS = 9;
-const LINE_STEPS = 30;
+const LINE_SUBDIVISIONS = 30;
+const LINE_STEPS = 20;
 const STEP_SIZE = (2 * Math.PI) / LINE_STEPS;
-const STEP_JITTER = 0.05;
-const STEP_WIDTH_RATIO = clampedRandom(1, 2);
-const STEP_HEIGHT_RATIO = clampedRandom(1, 1);
+const STEP_JITTER = 0.35;
+const STEP_WIDTH_RATIO = clampedRandom(1, 2.667);
+const STEP_HEIGHT_RATIO = clampedRandom(1, 1.333);
 
 let renderer, scene, camera, composer, tanFOV;
 
@@ -83,11 +83,11 @@ function init() {
 	window.addEventListener("resize", handleResize);
 	screen.orientation.addEventListener("change", handleResize);
 
-	const baseMesh = createBaseLineMesh();
+	const baseMesh = createLineMesh();
 	const baseGeometry = baseMesh.geometry.clone();
 
 	const group = new Group();
-	for (let i = 1; i <= NUM_LINES; i++) {
+	for (let i = 0; i < NUM_LINES; i++) {
 		const mesh = baseMesh.clone();
 		mesh.geometry = baseGeometry.clone();
 		mesh.geometry.rotateZ((i / NUM_LINES) * Math.PI * LINE_ROTATION);
@@ -130,9 +130,9 @@ function handleResize() {
 	composer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function createBaseLineMesh() {
+function createLineMesh(count) {
 	const vertices = [];
-	for (let i = 0; i <= LINE_STEPS; i++) {
+	for (let i = 0; i < LINE_STEPS; i++) {
 		vertices.push(
 			new Vector3(
 				Math.sin(i * STEP_SIZE) * STEP_WIDTH_RATIO +
@@ -144,16 +144,17 @@ function createBaseLineMesh() {
 		);
 	}
 
-	const spline = new CatmullRomCurve3(vertices, true);
+	const spline = new CatmullRomCurve3(vertices, true, "catmullrom");
 	const samples = spline.getPoints(vertices.length * LINE_SUBDIVISIONS);
 
 	const geometry = new BufferGeometry().setFromPoints(samples);
 	geometry.center();
 	const material = new LineBasicMaterial({ color: 0xffffff });
 
-	line.computeLineDistances();
+	const mesh = new Line(geometry, material, count);
+	mesh.computeLineDistances()
 
-	return line;
+	return mesh;
 }
 
 function setupPostProcessing() {
@@ -187,6 +188,8 @@ function setupPostProcessing() {
 	composer.addPass(filmPass);
 }
 
-function clampedRandom(range, offset) {
-	return Math.random() * range + offset;
+function clampedRandom(range, offset, signed = false) {
+	return (
+		(Math.random() * range + offset) * (!signed || Math.random() > 0.5 ? 1 : -1)
+	);
 }
