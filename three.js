@@ -2,7 +2,6 @@ import {
 	BufferGeometry,
 	CatmullRomCurve3,
 	Color,
-	Fog,
 	Group,
 	Line,
 	LineBasicMaterial,
@@ -65,7 +64,6 @@ animate();
 function init() {
 	scene = new Scene();
 	scene.background = new Color(0x999999);
-	scene.fog = new Fog(0xebebeb, 10, 1000);
 
 	renderer = new WebGLRenderer({ antialias: true });
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -151,11 +149,8 @@ function createBaseLineMesh() {
 
 	const geometry = new BufferGeometry().setFromPoints(samples);
 	geometry.center();
+	const material = new LineBasicMaterial({ color: 0xffffff });
 
-	const line = new Line(
-		geometry,
-		new LineBasicMaterial({ color: 0xffffff, fog: true }),
-	);
 	line.computeLineDistances();
 
 	return line;
