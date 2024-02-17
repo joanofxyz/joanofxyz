@@ -31,25 +31,24 @@ if (!WebGL.isWebGLAvailable()) {
 }
 
 // TODO:
-// - phone responsiveness a bit wonky on actual phones
 
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
 const NUM_LINES = Math.floor(
 	Math.max(window.innerWidth / 60, window.innerHeight / 30),
 );
-const LINE_ROTATION = clampedRandom(0.3, 0.15, true);
-const LINE_GAP = Math.round(clampedRandom(3, 2));
+const LINE_ROTATION = clampedRandom(-0.45, 0.45);
+const LINE_GAP = Math.round(clampedRandom(2, 5));
 const WAVE_DEPTH = 0.5;
 const WAVE_SPEED =
-	Math.round(Math.random() + Math.round(clampedRandom(0.67, 0.5))) * 10;
+	Math.round(Math.random() + Math.round(clampedRandom(0.5, 1.17))) * 10;
 
 const LINE_SUBDIVISIONS = 30;
 const LINE_STEPS = 20;
 const STEP_SIZE = (2 * Math.PI) / LINE_STEPS;
 const STEP_JITTER = 0.35;
-const STEP_WIDTH_RATIO = clampedRandom(1, 2.667);
-const STEP_HEIGHT_RATIO = clampedRandom(1, 1.333);
+const STEP_WIDTH_RATIO = clampedRandom(2.667, 3.667);
+const STEP_HEIGHT_RATIO = clampedRandom(1.333, 2.333);
 
 let renderer, scene, camera, composer, tanFOV;
 
@@ -136,9 +135,9 @@ function createLineMesh(count) {
 		vertices.push(
 			new Vector3(
 				Math.sin(i * STEP_SIZE) * STEP_WIDTH_RATIO +
-				clampedRandom(STEP_JITTER, 0),
+				clampedRandom(0, STEP_JITTER),
 				Math.cos(i * STEP_SIZE) * STEP_HEIGHT_RATIO +
-				clampedRandom(STEP_JITTER, 0),
+				clampedRandom(0, STEP_JITTER),
 				0,
 			),
 		);
@@ -188,8 +187,7 @@ function setupPostProcessing() {
 	composer.addPass(filmPass);
 }
 
-function clampedRandom(range, offset, signed = false) {
-	return (
-		(Math.random() * range + offset) * (!signed || Math.random() > 0.5 ? 1 : -1)
-	);
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_number_between_two_values
+function clampedRandom(min, max) {
+	return Math.random() * (max - min) + min;
 }
