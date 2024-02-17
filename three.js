@@ -43,8 +43,8 @@ const NUM_LINES = Math.floor(
 		? window.innerWidth / 60
 		: window.innerHeight / 30,
 );
-const LINE_ROTATION = clampedRandom(-0.45, 0.45);
-const LINE_GAP = Math.round(clampedRandom(2, 5));
+const LINE_ROTATION = clampedRandom(-0.3, 0.45);
+const LINE_GAP = Math.round(clampedRandom(2, 4));
 const WAVE_DEPTH = 0.5;
 const WAVE_SPEED =
 	Math.round(Math.random() + Math.round(clampedRandom(0.5, 1.17))) * 10;
@@ -53,8 +53,8 @@ const LINE_SUBDIVISIONS = 30;
 const LINE_STEPS = 20;
 const STEP_SIZE = (2 * Math.PI) / LINE_STEPS;
 const STEP_JITTER = 0.35 / 2;
-const STEP_WIDTH_RATIO = clampedRandom(2.667, 3.667);
-const STEP_HEIGHT_RATIO = clampedRandom(1.333, 2.333);
+const STEP_WIDTH_RATIO = clampedRandom(2.67, 3.67);
+const STEP_HEIGHT_RATIO = clampedRandom(1.33, 2.33);
 
 let renderer, scene, camera, composer, tanFOV;
 
@@ -189,5 +189,10 @@ function setupPostProcessing() {
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_number_between_two_values
 function clampedRandom(min, max) {
-	return Math.random() * (max - min) + min;
+	let sign = 1;
+	if (min < 0) {
+		min = max + min;
+		sign = Math.random() > 0.5 ? 1 : -1;
+	}
+	return sign * (Math.random() * (max - min) + min);
 }
