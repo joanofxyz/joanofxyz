@@ -88,12 +88,10 @@ function init() {
 	screen.orientation.addEventListener("change", handleResize);
 
 	const baseMesh = createLineMesh();
-	const baseGeometry = baseMesh.geometry.clone();
-
 	const group = new Group();
 	for (let i = 0; i < NUM_LINES; i++) {
 		const mesh = baseMesh.clone();
-		mesh.geometry = baseGeometry.clone();
+		mesh.geometry = baseMesh.geometry.clone();
 		mesh.geometry.rotateZ((i / NUM_LINES) * Math.PI * LINE_ROTATION);
 		mesh.geometry.scale(i / LINE_GAP, i / LINE_GAP, i / LINE_GAP);
 		mesh.index = i;
