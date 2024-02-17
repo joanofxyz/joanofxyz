@@ -129,7 +129,7 @@ function handleResize() {
 	composer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function createLineMesh(count) {
+function createLineMesh() {
 	const vertices = [];
 	for (let i = 0; i < LINE_STEPS; i++) {
 		vertices.push(
@@ -150,7 +150,7 @@ function createLineMesh(count) {
 	geometry.center();
 	const material = new LineBasicMaterial({ color: 0xffffff });
 
-	const mesh = new Line(geometry, material, count);
+	const mesh = new Line(geometry, material);
 	mesh.computeLineDistances();
 
 	return mesh;
