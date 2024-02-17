@@ -43,10 +43,9 @@ const NUM_LINES = Math.floor(
 		: window.innerHeight / 30,
 );
 const LINE_ROTATION = clampedRandom(-0.2, 0.3);
-const LINE_GAP = Math.round(clampedRandom(2, 4));
+const LINE_GAP = clampedRandom(3, 4);
 const WAVE_DEPTH = 0.5;
-const WAVE_SPEED =
-	Math.round(Math.random() + Math.round(clampedRandom(0.5, 1.17))) * 10;
+const WAVE_SPEED = clampedRandom(1.67, 3) * 10;
 
 const LINE_SUBDIVISIONS = 30;
 const LINE_STEPS = 20;
