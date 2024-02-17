@@ -43,7 +43,7 @@ const NUM_LINES = Math.floor(
 		? window.innerWidth / 60
 		: window.innerHeight / 30,
 );
-const LINE_ROTATION = clampedRandom(-0.3, 0.45);
+const LINE_ROTATION = clampedRandom(-0.2, 0.3);
 const LINE_GAP = Math.round(clampedRandom(2, 4));
 const WAVE_DEPTH = 0.5;
 const WAVE_SPEED =
