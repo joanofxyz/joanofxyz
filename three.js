@@ -31,6 +31,9 @@ if (!WebGL.isWebGLAvailable()) {
 }
 
 // TODO:
+// - phone responsiveness a bit wonky on actual phones: rotating the phone makes the scene not adjust to the full new width
+// - moving 3d noise for something
+// - MeshLine lib
 
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
@@ -92,11 +95,7 @@ function init() {
 		const mesh = baseMesh.clone();
 		mesh.geometry = baseGeometry.clone();
 		mesh.geometry.rotateZ((i / NUM_LINES) * Math.PI * LINE_ROTATION);
-		mesh.geometry.scale(
-			Math.sqrt(i * i) / LINE_GAP,
-			Math.sqrt(i * i) / LINE_GAP,
-			Math.sqrt(i * i) / LINE_GAP,
-		);
+		mesh.geometry.scale(i / LINE_GAP, i / LINE_GAP, i / LINE_GAP);
 		mesh.index = i;
 		group.add(mesh);
 	}
