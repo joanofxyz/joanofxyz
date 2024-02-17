@@ -42,7 +42,7 @@ const LINE_ROTATION = clampedRandom(0.3, 0.15, true);
 const LINE_GAP = Math.round(clampedRandom(3, 2));
 const WAVE_DEPTH = 0.5;
 const WAVE_SPEED =
-	Math.round(Math.random() + Math.round(clampedRandom(1, 1))) * 10;
+	Math.round(Math.random() + Math.round(clampedRandom(0.67, 0.5))) * 10;
 
 const LINE_SUBDIVISIONS = 30;
 const LINE_STEPS = 20;
@@ -152,7 +152,7 @@ function createLineMesh(count) {
 	const material = new LineBasicMaterial({ color: 0xffffff });
 
 	const mesh = new Line(geometry, material, count);
-	mesh.computeLineDistances()
+	mesh.computeLineDistances();
 
 	return mesh;
 }
