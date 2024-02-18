@@ -33,51 +33,59 @@ if (!WebGL.isWebGLAvailable()) {
 // TODO:
 // - phone responsiveness a bit wonky on actual phones: rotating the phone makes the scene not adjust to the full new width
 // - moving 3d noise for something
+// - multiple neighbourhood cellular automata
 
+// scene
+let renderer, scene, camera, composer, tanFOV;
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
-
 const BACKGROUND_HUE = clampedRandom(0, 360);
 const BACKGROUND_SATURATION = 100;
 const BACKGROUND_LIGHTNESS = 55;
 const COLOR_PROBABILITY = 5;
-let f_accumulator = 0,
-	f_step = 0,
-	f_delta = 0,
-	f_prevousTime = 0,
-	f_fadeInDone = false;
-const f_SATURATION =
-	Math.random() < COLOR_PROBABILITY / 100 ? BACKGROUND_SATURATION : 0;
-const f_STEP = (100 - BACKGROUND_LIGHTNESS) / 100;
-const f_DURATION = 1667;
-const f_RATE = f_DURATION / 100;
-const NUM_LINES = Math.floor(
+
+// line
+const l_STEPS = 20;
+const l_STEP_SIZE = (2 * Math.PI) / l_STEPS;
+const l_STEP_JITTER = 0.35 / 2;
+const l_SUBDIVISIONS = 30;
+const l_STEP_WIDTH_RATIO = clampedRandom(2.67, 3.67);
+const l_STEP_HEIGHT_RATIO = clampedRandom(1.33, 2.33);
+
+// waves
+const w_NUM_LINES = Math.floor(
 	window.innerWidth >= window.innerHeight
 		? window.innerWidth / 60
 		: window.innerHeight / 30,
 );
-const LINE_ROTATION = clampedRandom(-0.2, 0.3);
-const LINE_GAP = clampedRandom(3, 4);
-const WAVE_DEPTH = 0.5;
-const WAVE_SPEED = clampedRandom(1.67, 3) * 10;
+const w_ROTATION = clampedRandom(-0.2, 0.3);
+const w_GAP = clampedRandom(3, 4);
+const w_DEPTH = 0.5;
+const w_SPEED = clampedRandom(1.67, 3) * 10;
 
-const LINE_SUBDIVISIONS = 30;
-const LINE_STEPS = 20;
-const STEP_SIZE = (2 * Math.PI) / LINE_STEPS;
-const STEP_JITTER = 0.35 / 2;
-const STEP_WIDTH_RATIO = clampedRandom(2.67, 3.67);
-const STEP_HEIGHT_RATIO = clampedRandom(1.33, 2.33);
+// fade in
+let fi_accumulator = 0,
+	fi_step = 0,
+	fi_delta = 0,
+	fi_prevousTime = 0,
+	fi_fadeInDone = false;
+const fi_SATURATION =
+	Math.random() < COLOR_PROBABILITY / 100 ? BACKGROUND_SATURATION : 0;
+const fi_STEP = (100 - BACKGROUND_LIGHTNESS) / 100;
+const fi_DURATION = 1667;
+const fi_RATE = fi_DURATION / 100;
 
-const AFTERIMAGE_DAMP = clampedRandom(0.92, 0.97);
+// postprocessing
+const pp_AFTERIMAGE_DAMP = clampedRandom(0.92, 0.97);
+const pp_FILM_NOISE = 0.3;
 
-let renderer, scene, camera, composer, tanFOV;
-
+// scene start
 init();
 
 const title = document.getElementById("title");
 title.className = "fade-in";
 title.style.opacity = "100%";
 
-f_prevousTime = Date.now();
+fi_prevousTime = Date.now();
 animate();
 
 function init() {
@@ -104,11 +112,11 @@ function init() {
 
 	const baseMesh = createLineMesh();
 	const group = new Group();
-	for (let i = 0; i < NUM_LINES; i++) {
+	for (let i = 0; i < w_NUM_LINES; i++) {
 		const mesh = baseMesh.clone();
 		mesh.geometry = baseMesh.geometry.clone();
-		mesh.geometry.rotateZ((i / NUM_LINES) * Math.PI * LINE_ROTATION);
-		mesh.geometry.scale(i / LINE_GAP, i / LINE_GAP, i / LINE_GAP);
+		mesh.geometry.rotateZ((i / w_NUM_LINES) * Math.PI * w_ROTATION);
+		mesh.geometry.scale(i / w_GAP, i / w_GAP, i / w_GAP);
 		mesh.index = i;
 		group.add(mesh);
 	}
@@ -122,26 +130,26 @@ function animate() {
 	const time = Date.now();
 
 	// fade in animation
-	if (!f_fadeInDone) {
+	if (!fi_fadeInDone) {
 		scene.background.setStyle(
-			`hsl(${BACKGROUND_HUE}, ${f_SATURATION}%, ${100 - (f_step * (100 - BACKGROUND_LIGHTNESS)) / 100}%)`,
+			`hsl(${BACKGROUND_HUE}, ${fi_SATURATION}%, ${100 - (fi_step * (100 - BACKGROUND_LIGHTNESS)) / 100}%)`,
 		);
-		f_step += f_STEP;
+		fi_step += fi_STEP;
 
-		f_accumulator = f_RATE;
-		f_delta = time - f_prevousTime;
-		while (f_accumulator >= f_delta) {
-			f_accumulator--;
+		fi_accumulator = fi_RATE;
+		fi_delta = time - fi_prevousTime;
+		while (fi_accumulator >= fi_delta) {
+			fi_accumulator--;
 		}
-		f_fadeInDone = fi_step > 100 - BACKGROUND_LIGHTNESS;
+		fi_fadeInDone = fi_step > 100 - BACKGROUND_LIGHTNESS;
 	}
 
 	scene.traverse(function(object) {
 		if (object.isLine) {
 			object.position.z =
 				Math.sin(
-					((object.index % NUM_LINES) * Math.PI) / WAVE_SPEED + time * 0.001,
-				) * WAVE_DEPTH;
+					((object.index % w_NUM_LINES) * Math.PI) / w_SPEED + time * 0.001,
+				) * w_DEPTH;
 		}
 	});
 
@@ -161,20 +169,20 @@ function handleResize() {
 
 function createLineMesh() {
 	const vertices = [];
-	for (let i = 0; i < LINE_STEPS; i++) {
+	for (let i = 0; i < l_STEPS; i++) {
 		vertices.push(
 			new Vector3(
-				Math.sin(i * STEP_SIZE) * STEP_WIDTH_RATIO +
-				clampedRandom(-STEP_JITTER, STEP_JITTER),
-				Math.cos(i * STEP_SIZE) * STEP_HEIGHT_RATIO +
-				clampedRandom(-STEP_JITTER, STEP_JITTER),
+				Math.sin(i * l_STEP_SIZE) * l_STEP_WIDTH_RATIO +
+				clampedRandom(-l_STEP_JITTER, l_STEP_JITTER),
+				Math.cos(i * l_STEP_SIZE) * l_STEP_HEIGHT_RATIO +
+				clampedRandom(-l_STEP_JITTER, l_STEP_JITTER),
 				0,
 			),
 		);
 	}
 
 	const spline = new CatmullRomCurve3(vertices, true, "catmullrom");
-	const samples = spline.getPoints(vertices.length * LINE_SUBDIVISIONS);
+	const samples = spline.getPoints(vertices.length * l_SUBDIVISIONS);
 
 	const geometry = new BufferGeometry().setFromPoints(samples);
 	geometry.center();
@@ -192,7 +200,7 @@ function setupPostProcessing() {
 	const renderPass = new RenderPass(scene, camera);
 	composer.addPass(renderPass);
 
-	const afterimagePass = new AfterimagePass(AFTERIMAGE_DAMP);
+	const afterimagePass = new AfterimagePass(pp_AFTERIMAGE_DAMP);
 	composer.addPass(afterimagePass);
 
 	const bloomPass = new UnrealBloomPass(
@@ -210,7 +218,7 @@ function setupPostProcessing() {
 	});
 	composer.addPass(bokehPass);
 
-	const filmPass = new FilmPass(0.35);
+	const filmPass = new FilmPass(pp_FILM_NOISE);
 	composer.addPass(filmPass);
 }
 
@@ -219,7 +227,7 @@ function clampedRandom(min, max) {
 	let sign = 1;
 	if (min < 0) {
 		min = max + min;
-		sign = Math.random() > 0.5 ? 1 : -1;
+		sign = Math.random() < 0.5 ? 1 : -1;
 	}
 	return sign * (Math.random() * (max - min) + min);
 }
