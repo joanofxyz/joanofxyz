@@ -43,6 +43,10 @@ const BACKGROUND_SATURATION = 100;
 const BACKGROUND_LIGHTNESS = 55;
 const COLOR_PROBABILITY = 5;
 
+// postprocessing
+const pp_AFTERIMAGE_DAMP = clampedRandom(0.93, 0.98);
+const pp_FILM_NOISE = 0.3;
+
 // line
 const l_STEPS = 20;
 const l_STEP_SIZE = (2 * Math.PI) / l_STEPS;
@@ -73,10 +77,6 @@ const fi_SATURATION =
 const fi_STEP = (100 - BACKGROUND_LIGHTNESS) / 100;
 const fi_DURATION = 1667;
 const fi_RATE = fi_DURATION / 100;
-
-// postprocessing
-const pp_AFTERIMAGE_DAMP = clampedRandom(0.92, 0.97);
-const pp_FILM_NOISE = 0.3;
 
 // scene start
 init();
