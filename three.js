@@ -34,12 +34,14 @@ if (!WebGL.isWebGLAvailable()) {
 // - phone responsiveness a bit wonky on actual phones: rotating the phone makes the scene not adjust to the full new width
 // - moving 3d noise for something
 // - multiple neighbourhood cellular automata
+// - fading bloom in intro fade in
+// - longer fade in mayhaps
 
 // scene
 let renderer, scene, camera, composer, tanFOV;
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 const BACKGROUND_HUE = clampedRandom(0, 360);
-const BACKGROUND_SATURATION = 100;
+const BACKGROUND_SATURATION = 85;
 const BACKGROUND_LIGHTNESS = 55;
 const COLOR_PROBABILITY = 5;
 
