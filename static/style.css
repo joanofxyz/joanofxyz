@@ -50,10 +50,12 @@ body {
 @keyframes fadeIn {
 	0% {
 		opacity: 0%;
+		filter: grayscale(67%);
 	}
 
 	100% {
 		opacity: 100%;
+		filter: grayscale(0%);
 	}
 }
 

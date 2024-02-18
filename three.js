@@ -36,6 +36,20 @@ if (!WebGL.isWebGLAvailable()) {
 
 const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 
+const BACKGROUND_HUE = clampedRandom(0, 360);
+const BACKGROUND_SATURATION = 100;
+const BACKGROUND_LIGHTNESS = 55;
+const COLOR_PROBABILITY = 5;
+let f_accumulator = 0,
+	f_step = 0,
+	f_delta = 0,
+	f_prevousTime = 0,
+	f_fadeInDone = false;
+const f_SATURATION =
+	Math.random() < COLOR_PROBABILITY / 100 ? BACKGROUND_SATURATION : 0;
+const f_STEP = (100 - BACKGROUND_LIGHTNESS) / 100;
+const f_DURATION = 1667;
+const f_RATE = f_DURATION / 100;
 const NUM_LINES = Math.floor(
 	window.innerWidth >= window.innerHeight
 		? window.innerWidth / 60
@@ -63,11 +77,12 @@ const title = document.getElementById("title");
 title.className = "fade-in";
 title.style.opacity = "100%";
 
+f_prevousTime = Date.now();
 animate();
 
 function init() {
 	scene = new Scene();
-	scene.background = new Color(0x999999);
+	scene.background = new Color(0xffffff);
 
 	renderer = new WebGLRenderer({ antialias: true });
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -104,13 +119,29 @@ function init() {
 
 function animate() {
 	requestAnimationFrame(animate);
+	const time = Date.now();
 
-	const time = Date.now() * 0.001;
+	// fade in animation
+	if (!f_fadeInDone) {
+		scene.background.setStyle(
+			`hsl(${BACKGROUND_HUE}, ${f_SATURATION}%, ${100 - (f_step * (100 - BACKGROUND_LIGHTNESS)) / 100}%)`,
+		);
+		f_step += f_STEP;
+
+		f_accumulator = f_RATE;
+		f_delta = time - f_prevousTime;
+		while (f_accumulator >= f_delta) {
+			f_accumulator--;
+		}
+		f_fadeInDone = fi_step > 100 - BACKGROUND_LIGHTNESS;
+	}
+
 	scene.traverse(function(object) {
 		if (object.isLine) {
 			object.position.z =
-				Math.sin(((object.index % NUM_LINES) * Math.PI) / WAVE_SPEED + time) *
-				WAVE_DEPTH;
+				Math.sin(
+					((object.index % NUM_LINES) * Math.PI) / WAVE_SPEED + time * 0.001,
+				) * WAVE_DEPTH;
 		}
 	});
 
