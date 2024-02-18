@@ -1,111 +1,105 @@
 html,
 body {
-  width: 100%;
-  height: 100%;
-  margin: 0px;
+	width: 100%;
+	height: 100%;
+	margin: 0px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 @font-face {
-  font-family: "font";
-  src: url("ubuntu.ttf");
+	font-family: "font";
+	src: url("ubuntu.ttf");
 }
 
 @keyframes rainbow {
-  from {
-    filter: hue-rotate(0deg);
-  }
+	from {
+		filter: hue-rotate(0deg);
+	}
 
-  to {
-    filter: hue-rotate(360deg);
-  }
+	to {
+		filter: hue-rotate(360deg);
+	}
 }
 
 .rainbow {
-  animation-name: rainbow;
-  animation-duration: 1.667s;
-  animation-direction: normal;
-  animation-iteration-count: infinite;
-  background: linear-gradient(
-      45deg,
-      hsla(0deg, 100%, 75%, 80%),
-      hsla(120deg, 100%, 75%, 20%) 80%
-    ),
-    linear-gradient(
-      165deg,
-      hsla(120deg, 100%, 75%, 80%),
-      hsla(240deg, 100%, 75%, 20%) 80%
-    ),
-    linear-gradient(
-      285deg,
-      hsla(240deg, 100%, 75%, 80%),
-      hsla(360deg, 100%, 75%, 20%) 80%
-    );
+	animation-name: rainbow;
+	animation-duration: 1.667s;
+	animation-direction: normal;
+	animation-iteration-count: infinite;
+	background: linear-gradient(45deg,
+			hsla(0deg, 100%, 75%, 80%),
+			hsla(120deg, 100%, 75%, 20%) 80%),
+		linear-gradient(165deg,
+			hsla(120deg, 100%, 75%, 80%),
+			hsla(240deg, 100%, 75%, 20%) 80%),
+		linear-gradient(285deg,
+			hsla(240deg, 100%, 75%, 80%),
+			hsla(360deg, 100%, 75%, 20%) 80%);
 }
 
 .fade-in {
-  animation-name: fadeIn;
-  animation-duration: 1.67s;
-  animation-direction: normal;
-  animation-timing-function: ease-in;
+	animation-name: fadeIn;
+	animation-duration: 1.67s;
+	animation-direction: normal;
+	animation-timing-function: ease-in;
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0%;
-  }
+	0% {
+		opacity: 0%;
+	}
 
-  100% {
-    opacity: 100%;
-  }
+	100% {
+		opacity: 100%;
+	}
 }
 
 *:focus-visible {
-  outline: none !important;
+	outline: none !important;
 }
 
 #title {
-  /* will get shown once the rest renders */
-  opacity: 0%;
+	/* will get shown once the rest renders */
+	opacity: 0%;
 
-  position: absolute;
-  margin: 0px;
-  border: 0px;
+	position: absolute;
+	margin: 0px;
+	border: 0px;
 
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 
-  display: flex;
-  flex-direction: row;
+	display: flex;
+	flex-direction: row;
 
-  font-size: clamp(1rem, 3svw, 3rem);
-  font-family: "font", sans-serif, system-ui;
-  color: hsla(0deg, 100%, 100%, 80%);
+	font-size: clamp(1rem, 3svw, 3rem);
+	font-family: "font", sans-serif, system-ui;
+	color: hsla(0deg, 100%, 100%, 80%);
 
-  .rainbow {
-    color: transparent;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+	.rainbow {
+		color: transparent;
+		background-clip: text;
+		-webkit-background-clip: text;
+	}
 }
 
 #error-dialog {
-  border: 0px;
-  color: white;
-  font-family: system-ui;
+	border: 0px;
+	color: white;
+	font-family: system-ui;
 
-  a {
-    text-decoration: unset !important;
-    font-weight: bold;
-    color: hsl(120deg, 100%, 75%) !important;
-    filter: grayscale(70%);
-  }
+	a {
+		text-decoration: unset !important;
+		font-weight: bold;
+		color: hsl(120deg, 100%, 75%) !important;
+		filter: grayscale(70%);
+	}
 
-  a:hover {
-    filter: unset;
-  }
+	a:hover {
+		filter: unset;
+	}
 }
