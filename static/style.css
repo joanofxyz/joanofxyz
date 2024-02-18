@@ -78,7 +78,7 @@ body {
 
 	font-size: clamp(1rem, 3svw, 3rem);
 	font-family: "font", sans-serif, system-ui;
-	color: hsla(0deg, 100%, 100%, 80%);
+	color: hsla(0deg, 100%, 100%, 100%);
 
 	.rainbow {
 		color: transparent;
