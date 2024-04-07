@@ -14,32 +14,6 @@ body {
 	src: url("ubuntu.ttf");
 }
 
-@keyframes rainbow {
-	from {
-		filter: hue-rotate(0deg);
-	}
-
-	to {
-		filter: hue-rotate(360deg);
-	}
-}
-
-.rainbow {
-	animation-name: rainbow;
-	animation-duration: 1.667s;
-	animation-direction: normal;
-	animation-iteration-count: infinite;
-	background: linear-gradient(45deg,
-			hsla(0deg, 100%, 75%, 80%),
-			hsla(120deg, 100%, 75%, 20%) 80%),
-		linear-gradient(165deg,
-			hsla(120deg, 100%, 75%, 80%),
-			hsla(240deg, 100%, 75%, 20%) 80%),
-		linear-gradient(285deg,
-			hsla(240deg, 100%, 75%, 80%),
-			hsla(360deg, 100%, 75%, 20%) 80%);
-}
-
 .fade-in {
 	animation-name: fadeIn;
 	animation-duration: 1.75s;
@@ -79,12 +53,6 @@ body {
 	font-size: clamp(1rem, 3svw, 3rem);
 	font-family: "font", sans-serif, system-ui;
 	color: hsla(0deg, 100%, 100%, 100%);
-
-	.rainbow {
-		color: transparent;
-		background-clip: text;
-		-webkit-background-clip: text;
-	}
 }
 
 #error-dialog {
