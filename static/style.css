@@ -38,6 +38,8 @@ body {
 #title {
 	/* will get shown once the rest renders */
 	opacity: 0%;
+	transition-property: filter;
+	transition-duration: 200ms;
 
 	position: absolute;
 	margin: 0px;
@@ -53,6 +55,12 @@ body {
 	font-size: clamp(1rem, 3svw, 3rem);
 	font-family: "font", sans-serif, system-ui;
 	color: hsla(0deg, 100%, 100%, 100%);
+	text-decoration: none;
+	line-height: 0;
+}
+
+#title:hover {
+	filter: blur(2px) brightness(95%);
 }
 
 #error-dialog {
