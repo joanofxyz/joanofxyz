@@ -40,6 +40,7 @@ body {
 	opacity: 0%;
 	transition-property: filter;
 	transition-duration: 200ms;
+	filter: blur(2px) brightness(97%);
 
 	position: absolute;
 	margin: 0px;
@@ -60,7 +61,7 @@ body {
 }
 
 #title:hover {
-	filter: blur(2px) brightness(95%);
+	filter: none;
 }
 
 #error-dialog {
