@@ -104,8 +104,8 @@ function init() {
 		0.1,
 		1000,
 	);
-	camera.position.set(-4, -7.5, 5.5);
-	camera.rotation.set(0.8, -0.3, 0.3);
+	camera.position.set(-4, -10, 3);
+	camera.rotation.set(1.3, -0.3, 0.3);
 	scene.add(camera);
 	tanFOV = Math.tan(((Math.PI / 180) * camera.fov) / 2);
 
