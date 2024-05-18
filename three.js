@@ -74,7 +74,7 @@ let fi_step = 0,
 const fi_SATURATION =
 	Math.random() < COLOR_PROBABILITY / 100 ? BACKGROUND_SATURATION : 0;
 const fi_STEP = (100 - BACKGROUND_LIGHTNESS) / 100;
-const fi_DURATION = 1667;
+const fi_DURATION = 5000;
 const fi_RATE = fi_DURATION / 100;
 
 // scene start
