@@ -69,11 +69,8 @@ const w_DEPTH = 0.5;
 const w_SPEED = clampedRandom(1.67, 3) * 10;
 
 // fade in
-let fi_accumulator = 0,
-	fi_step = 0,
-	fi_delta = 0,
-	fi_prevousTime = 0,
-	fi_fadeInDone = false;
+let fi_step = 0,
+	fi_timeout = undefined;
 const fi_SATURATION =
 	Math.random() < COLOR_PROBABILITY / 100 ? BACKGROUND_SATURATION : 0;
 const fi_STEP = (100 - BACKGROUND_LIGHTNESS) / 100;
@@ -87,7 +84,6 @@ const title = document.getElementById("title");
 title.className = "fade-in";
 title.style.opacity = "100%";
 
-fi_prevousTime = Date.now();
 animate();
 
 function init() {
@@ -127,23 +123,22 @@ function init() {
 	setupPostProcessing();
 }
 
+function fadeIn() {
+	scene.background.setStyle(
+		`hsl(${BACKGROUND_HUE}, ${fi_SATURATION}%, ${100 - (fi_step * (100 - BACKGROUND_LIGHTNESS)) / 100}%)`,
+	);
+	fi_step += fi_STEP;
+	if (fi_step > 100 - BACKGROUND_LIGHTNESS) {
+		clearInterval(fi_timeout);
+	}
+}
+
 function animate() {
 	requestAnimationFrame(animate);
 	const time = Date.now();
 
-	// fade in animation
-	if (!fi_fadeInDone) {
-		scene.background.setStyle(
-			`hsl(${BACKGROUND_HUE}, ${fi_SATURATION}%, ${100 - (fi_step * (100 - BACKGROUND_LIGHTNESS)) / 100}%)`,
-		);
-		fi_step += fi_STEP;
-
-		fi_accumulator = fi_RATE;
-		fi_delta = time - fi_prevousTime;
-		while (fi_accumulator >= fi_delta) {
-			fi_accumulator--;
-		}
-		fi_fadeInDone = fi_step > 100 - BACKGROUND_LIGHTNESS;
+	if (!fi_timeout) {
+		fi_timeout = setInterval(fadeIn, fi_RATE);
 	}
 
 	scene.traverse(function(object) {
