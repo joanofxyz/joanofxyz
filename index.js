@@ -1,4 +1,19 @@
 import {
+	AmplitudeEnvelope,
+	AutoPanner,
+	Channel,
+	Distortion,
+	FeedbackDelay,
+	Filter,
+	Limiter,
+	Noise,
+	Oscillator,
+	Reverb,
+	getDestination,
+	getTransport,
+} from "tone";
+
+import {
 	BufferGeometry,
 	CatmullRomCurve3,
 	Color,
@@ -43,7 +58,7 @@ const ORIGINAL_WINDOW_HEIGHT = window.innerHeight;
 const BACKGROUND_HUE = clampedRandom(0, 360);
 const BACKGROUND_SATURATION = 85;
 const BACKGROUND_LIGHTNESS = 55;
-const COLOR_PROBABILITY = 5;
+const COW_LEVEL = Math.random() < 0.05;
 
 // postprocessing
 const pp_AFTERIMAGE_DAMP = clampedRandom(0.93, 0.98);
@@ -71,8 +86,7 @@ const w_SPEED = clampedRandom(1.67, 3) * 10;
 // fade in
 let fi_step = 0,
 	fi_timeout = undefined;
-const fi_SATURATION =
-	Math.random() < COLOR_PROBABILITY / 100 ? BACKGROUND_SATURATION : 0;
+const fi_SATURATION = COW_LEVEL ? BACKGROUND_SATURATION : 0;
 const fi_STEP = (100 - BACKGROUND_LIGHTNESS) / 100;
 const fi_DURATION = 5000;
 const fi_RATE = fi_DURATION / 100;
@@ -84,6 +98,52 @@ const title = document.getElementById("title");
 title.className = "fade-in";
 title.style.opacity = "100%";
 
+// master bus
+const masterEnvelope = new AmplitudeEnvelope({ attack: 6, sustain: 1 });
+const master = new Channel({ channelCount: 2, volume: -8 }).chain(
+	masterEnvelope,
+	new FeedbackDelay({ delayTime: "4n", feedback: 0.5 }),
+	new Filter({
+		frequency: 220,
+		gain: 15,
+		Q: 3,
+		type: "lowshelf",
+		rolloff: -24,
+	}),
+	new Distortion({ wet: 0.25 }),
+	new Filter({ frequency: 4000, type: "lowpass" }),
+	new Reverb({ wet: 0.5 }),
+	new Limiter({ threshold: -0.1 }),
+	getDestination(),
+);
+
+// drone
+new Noise({ type: "brown", volume: -15 }).connect(master).start();
+for (const frequency of
+	COW_LEVEL
+	? [110.000, 131.827, 140.853, 150.497, 160.801, 192.709, 205.903] // joan7
+	: [55, 96.18975, 123.01156, 150.43251, 205.72674] // joan flat harmonic
+) {
+	new Oscillator({
+		type: `sine${Math.max(Math.floor(Math.random() * 32), 0)}`,
+		frequency: frequency,
+		volume: COW_LEVEL ? -9 : -6,
+	})
+		.chain(
+			new AutoPanner({
+				frequency: frequency * Math.random() * 0.005,
+				depth: 0.7,
+			}).start(),
+			master,
+		)
+		.start();
+}
+masterEnvelope.triggerAttack();
+
+// transport
+const transport = getTransport();
+transport.set({ bpm: 140 });
+transport.start();
 animate();
 
 function init() {
