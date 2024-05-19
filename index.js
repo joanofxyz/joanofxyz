@@ -59,6 +59,9 @@ const BACKGROUND_HUE = clampedRandom(0, 360);
 const BACKGROUND_SATURATION = 85;
 const BACKGROUND_LIGHTNESS = 55;
 const COW_LEVEL = Math.random() < 0.05;
+if (COW_LEVEL) {
+	console.log("there is no cow level")
+}
 
 // postprocessing
 const pp_AFTERIMAGE_DAMP = clampedRandom(0.93, 0.98);
@@ -121,8 +124,8 @@ const master = new Channel({ channelCount: 2, volume: -8 }).chain(
 new Noise({ type: "brown", volume: -15 }).connect(master).start();
 for (const frequency of
 	COW_LEVEL
-	? [110.000, 131.827, 140.853, 150.497, 160.801, 192.709, 205.903] // joan7
-	: [55, 96.18975, 123.01156, 150.43251, 205.72674] // joan flat harmonic
+		? [110.000, 131.827, 140.853, 150.497, 160.801, 192.709, 205.903] // joan7
+		: [55, 96.18975, 123.01156, 150.43251, 205.72674] // joan flat harmonic
 ) {
 	new Oscillator({
 		type: `sine${Math.max(Math.floor(Math.random() * 32), 0)}`,
