@@ -80,3 +80,20 @@ body {
 		filter: unset;
 	}
 }
+
+button {
+	border: none;
+	position: fixed;
+	right: 3rem;
+	bottom: 3rem;
+	width: 50px;
+	height: 50px;
+	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABkUlEQVR4nO3Zy0rDQBTG8X+VVrKXJPhSbnwOF4LP0IUrK/gIinipl4WPoIJoFaFe0I0rF+rOnY4MTCCEZGhtA+eM+WCgdAZOf8ycdGihSRNVaQErwCvwCWwCEcrSAfqAKYwuyhCHJQg7nlCEOK5A2PGNEsSRB5GNIBCGQBCGQBAGhY1tNEA6f0SYUBAGQYiTCRAiIHPA6YSI2iER0AM+SgovuTVrU0DUDtnwFI7dmhcNkHdPYXsdt/nRADEjFDY1Qa6AWyD1fL4UuATOJENu3PvDCkzq5oxDt6RCbA/eubkHYCE3l+Tm7gtz4iBVmGRchARI8QgNC699/SMOUtwZM85OSIPkj1NZz6iABHG0kpLGjj1PM5EQ39MpHhej5QtxIBlyAVyPcEUZAOf/5tLY8xSed2ueNUAiYL1iZxbdmq4GSF2/YYmE2LQr/i5QB5kGBmmYgxAgk2AIBYNkzH4IEJtZYDsESIbZCgGSHbM9D+ILRWkDuxUQe2VHG2anBLKMwswAq8Aj8OYunbaPmjRBWX4Bc9UHucl4BpMAAAAASUVORK5CYII=") 50% 50% no-repeat;
+	background-size: 100%;
+	filter: brightness(0%) invert(100%) blur(1px);
+
+}
+
+button:hover {
+	cursor: pointer;
+}

@@ -9,8 +9,10 @@ import {
 	Noise,
 	Oscillator,
 	Reverb,
+	getContext,
 	getDestination,
 	getTransport,
+	start,
 } from "tone";
 
 import {
@@ -50,7 +52,6 @@ if (!WebGL.isWebGLAvailable()) {
 // - moving 3d noise for something
 // - multiple neighbourhood cellular automata
 // - fading bloom in intro fade in
-// - longer fade in mayhaps
 
 // scene
 let renderer, scene, camera, composer, tanFOV;
@@ -94,13 +95,6 @@ const fi_STEP = (100 - BACKGROUND_LIGHTNESS) / 100;
 const fi_DURATION = 5000;
 const fi_RATE = fi_DURATION / 100;
 
-// scene start
-init();
-
-const title = document.getElementById("title");
-title.className = "fade-in";
-title.style.opacity = "100%";
-
 // master bus
 const masterEnvelope = new AmplitudeEnvelope({ attack: 6, sustain: 1 });
 const master = new Channel({ channelCount: 2, volume: -8 }).chain(
@@ -124,8 +118,8 @@ const master = new Channel({ channelCount: 2, volume: -8 }).chain(
 new Noise({ type: "brown", volume: -15 }).connect(master).start();
 for (const frequency of
 	COW_LEVEL
-		? [110.000, 131.827, 140.853, 150.497, 160.801, 192.709, 205.903] // joan7
-		: [55, 96.18975, 123.01156, 150.43251, 205.72674] // joan flat harmonic
+	? [110.000, 131.827, 140.853, 150.497, 160.801, 192.709, 205.903] // joan7
+	: [55, 96.18975, 123.01156, 150.43251, 205.72674] // joan flat harmonic
 ) {
 	new Oscillator({
 		type: `sine${Math.max(Math.floor(Math.random() * 32), 0)}`,
@@ -141,12 +135,27 @@ for (const frequency of
 		)
 		.start();
 }
+
+const transport = getTransport();
+transport.start();
 masterEnvelope.triggerAttack();
 
-// transport
-const transport = getTransport();
-transport.set({ bpm: 140 });
-transport.start();
+// init
+const title = document.getElementById("title");
+title.className = "fade-in";
+title.style.opacity = "100%";
+
+if (!navigator.userAgent.includes("Firefox")) {
+	const button = document.createElement("button", { class: "unmute" });
+	document.querySelector("body").appendChild(button);
+	button.onclick = async () => {
+		await start();
+		button.remove();
+	}
+}
+
+// scene start
+init();
 animate();
 
 function init() {
