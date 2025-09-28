@@ -5,13 +5,13 @@ import {
 	Distortion,
 	FeedbackDelay,
 	Filter,
+	getContext,
+	getDestination,
+	getTransport,
 	Limiter,
 	Noise,
 	Oscillator,
 	Reverb,
-	getContext,
-	getDestination,
-	getTransport,
 	start,
 } from "tone";
 
@@ -61,7 +61,7 @@ const BACKGROUND_SATURATION = 85;
 const BACKGROUND_LIGHTNESS = 55;
 const COW_LEVEL = Math.random() < 0.05;
 if (COW_LEVEL) {
-	console.log("there is no cow level")
+	console.log("there is no cow level");
 }
 
 // postprocessing
@@ -116,11 +116,12 @@ const master = new Channel({ channelCount: 2, volume: -8 }).chain(
 
 // drone
 new Noise({ type: "brown", volume: -15 }).connect(master).start();
-for (const frequency of
-	COW_LEVEL
-	? [110.000, 131.827, 140.853, 150.497, 160.801, 192.709, 205.903] // joan7
-	: [55, 96.18975, 123.01156, 150.43251, 205.72674] // joan flat harmonic
+for (
+	const frequency of COW_LEVEL
+		? [110.0, 131.827, 140.853, 150.497, 160.801, 192.709, 205.903] // joan7
+		: [55, 96.18975, 123.01156, 150.43251, 205.72674]
 ) {
+	// joan flat harmonic
 	new Oscillator({
 		type: `sine${Math.max(Math.floor(Math.random() * 32), 0)}`,
 		frequency: frequency,
@@ -151,7 +152,7 @@ if (!navigator.userAgent.includes("Firefox")) {
 	button.onclick = async () => {
 		await start();
 		button.remove();
-	}
+	};
 }
 
 // scene start
@@ -197,7 +198,9 @@ function init() {
 
 function fadeIn() {
 	scene.background.setStyle(
-		`hsl(${BACKGROUND_HUE}, ${fi_SATURATION}%, ${100 - (fi_step * (100 - BACKGROUND_LIGHTNESS)) / 100}%)`,
+		`hsl(${BACKGROUND_HUE}, ${fi_SATURATION}%, ${
+			100 - (fi_step * (100 - BACKGROUND_LIGHTNESS)) / 100
+		}%)`,
 	);
 	fi_step += fi_STEP;
 	if (fi_step > 100 - BACKGROUND_LIGHTNESS) {
@@ -213,12 +216,12 @@ function animate() {
 		fi_timeout = setInterval(fadeIn, fi_RATE);
 	}
 
-	scene.traverse(function(object) {
+	scene.traverse(function (object) {
 		if (object.isLine) {
-			object.position.z =
-				Math.sin(
-					((object.index % w_NUM_LINES) * Math.PI) / w_SPEED + time * 0.001,
-				) * w_DEPTH;
+			object.position.z = Math.sin(
+				((object.index % w_NUM_LINES) * Math.PI) / w_SPEED +
+					time * 0.001,
+			) * w_DEPTH;
 		}
 	});
 
@@ -226,8 +229,7 @@ function animate() {
 }
 
 function handleResize() {
-	camera.fov =
-		(360 / Math.PI) *
+	camera.fov = (360 / Math.PI) *
 		Math.atan(tanFOV * (window.innerHeight / ORIGINAL_WINDOW_HEIGHT));
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
@@ -242,9 +244,9 @@ function createLineMesh() {
 		vertices.push(
 			new Vector3(
 				Math.sin(i * l_STEP_SIZE) * l_STEP_WIDTH_RATIO +
-				clampedRandom(-l_STEP_JITTER, l_STEP_JITTER),
+					clampedRandom(-l_STEP_JITTER, l_STEP_JITTER),
 				Math.cos(i * l_STEP_SIZE) * l_STEP_HEIGHT_RATIO +
-				clampedRandom(-l_STEP_JITTER, l_STEP_JITTER),
+					clampedRandom(-l_STEP_JITTER, l_STEP_JITTER),
 				0,
 			),
 		);
